@@ -1,0 +1,30 @@
+default:
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  docker_username: "abssiwan"
+
+stages:
+  - build
+  - store
+
+build_images:
+  stage: build
+  script:
+    - docker login -u "$docker_username" -p "$docker_password"
+    - docker-compose -f docker-compose-build.yaml build
+    - docker tag reverseproxy:latest $docker_username/reverseproxy:latest
+    - docker tag udagram-api-user:latest $docker_username/udagram-api-user:latest
+    - docker tag udagram-api-feed:latest $docker_username/udagram-api-feed:latest
+    - docker tag udagram-frontend:latest $docker_username/udagram-frontend:latest
+
+store_images:
+  stage: store
+  script:
+    - docker login -u "$docker_username" -p "$docker_password"
+    - docker push $docker_username/reverseproxy:latest
+    - docker push $docker_username/udagram-api-user:latest
+    - docker push $docker_username/udagram-api-feed:latest
+    - docker push $docker_username/udagram-frontend:latest
