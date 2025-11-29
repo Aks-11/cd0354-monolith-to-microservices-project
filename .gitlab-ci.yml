@@ -1,10 +1,10 @@
 default:
-image: docker:latest
-services:
-  - docker:dind
+  image: docker:latest
+  services:
+    - docker:dind
 
 variables:
-  docker_username: "abssiwan"
+  DOCKER_USERNAME: "abssiwan"
 
 stages:
   - build
@@ -13,18 +13,23 @@ stages:
 build_images:
   stage: build
   script:
-    - docker login -u "$docker_username" -p "$docker_password"
+    - docker login -u "$DOCKER_USERNAME" -p "$docker_password"
     - docker-compose -f docker-compose-build.yaml build
-    - docker tag reverseproxy:latest $docker_username/reverseproxy:latest
-    - docker tag udagram-api-user:latest $docker_username/udagram-api-user:latest
-    - docker tag udagram-api-feed:latest $docker_username/udagram-api-feed:latest
-    - docker tag udagram-frontend:latest $docker_username/udagram-frontend:latest
+    - docker save -o udagram.tar $(docker images --format "{{.Repository}}:{{.Tag}}" | grep "$DOCKER_USERNAME")
+    - ls -lh udagram.tar
+
+  artifacts:
+    paths:
+      - udagram.tar
+    expire_in: 1 hour
 
 store_images:
   stage: store
   script:
-    - docker login -u "$docker_username" -p "$docker_password"
-    - docker push $docker_username/reverseproxy:latest
-    - docker push $docker_username/udagram-api-user:latest
-    - docker push $docker_username/udagram-api-feed:latest
-    - docker push $docker_username/udagram-frontend:latest
+    - docker load -i udagram.tar
+    - docker images
+    - docker login -u "$DOCKER_USERNAME" -p "$docker_password"
+    - docker push $DOCKER_USERNAME/reverseproxy:latest
+    - docker push $DOCKER_USERNAME/udagram-api-user:latest
+    - docker push $DOCKER_USERNAME/udagram-api-feed:latest
+    - docker push $DOCKER_USERNAME/udagram-frontend:latest
