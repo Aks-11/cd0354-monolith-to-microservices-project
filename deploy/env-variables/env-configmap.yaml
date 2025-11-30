@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  AWS_REGION: us-east-1
+  POSTGRES_HOST: pracdb.c3rqdawmgw5w.us-east-1.rds.amazonaws.com
+  POSTGRES_DB: pracdb
+  POSTGRES_PORT: "5432"
+  AWS_BUCKET: prac-abssiwan
+  JWT_SECRET: "secret1234"
+  URL: "http://localhost:8080"

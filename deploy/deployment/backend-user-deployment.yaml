@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-user-deployment
+  labels:
+    app: backend-user
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-user
+  template:
+    metadata:
+      labels:
+        app: backend-user
+    spec:
+      containers:
+        - name: backend-user
+          image: abssiwan/udagram-api-user:v2
+          envFrom:
+            - configMapRef: 
+                name: env-config
+            - secretRef:
+                name: app-secret
+          volumeMounts:
+              - name: app-aws-secret
+                mountPath: /root/.aws
+                readOnly: true
+      volumes:
+        - name: app-aws-secret
+          secret:
+            secretName: app-aws-secret  

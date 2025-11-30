@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-feed-deployment
+  labels:
+    app: backend-feed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-feed
+  template:
+    metadata:
+      labels:
+        app: backend-feed
+    spec:
+      containers:
+        - name: backend-feed
+          image: abssiwan/udagram-api-feed:v1
+          envFrom:
+            - configMapRef: 
+                name: env-config
+            - secretRef:
+                name: app-secret
+          volumeMounts:
+              - name: app-aws-secret
+                mountPath: /root/.aws
+                readOnly: true
+      volumes:
+        - name: app-aws-secret
+          secret:
+            secretName: app-aws-secret  
+
+
