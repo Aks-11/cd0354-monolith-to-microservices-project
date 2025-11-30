@@ -42,4 +42,4 @@ venv/
 !.elasticbeanstalk/*.global.yml
 udagram-api
 *set_env.sh
-
+deployment/env-variables/*.yaml

@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: abssiwan/udagram-frontend:latest
+          image: abssiwan/udagram-frontend:v2
           ports:
             - containerPort: 80

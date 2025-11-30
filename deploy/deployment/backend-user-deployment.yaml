@@ -16,13 +16,17 @@ spec:
     spec:
       containers:
         - name: backend-user
-          image: abssiwan/udagram-api-user:latest
-          ports:
-            - containerPort: 8080
+          image: abssiwan/udagram-api-user:v2
           envFrom:
             - configMapRef: 
                 name: env-config
             - secretRef:
                 name: app-secret
-            - secretRef:
-                name: app-aws-secret
+          volumeMounts:
+              - name: app-aws-secret
+                mountPath: /root/.aws
+                readOnly: true
+      volumes:
+        - name: app-aws-secret
+          secret:
+            secretName: app-aws-secret  

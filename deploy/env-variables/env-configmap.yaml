@@ -8,6 +8,5 @@ data:
   POSTGRES_DB: pracdb
   POSTGRES_PORT: "5432"
   AWS_BUCKET: prac-abssiwan
-  AWS_PROFILE: default
   JWT_SECRET: "secret1234"
-  URL: http://a5a86315b3cec49289a1ea2a45cc1315-767737812.us-east-1.elb.amazonaws.com/
+  URL: "http://localhost:8080"
